@@ -1,3 +1,6 @@
 require 'plugins.plugins'
+require 'plugins.prettier'
 require 'configs.configs'
 require 'configs.keybindings'
+require 'plugins.nvim-cmp'
+require 'lsp.lsp'

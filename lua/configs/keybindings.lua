@@ -28,7 +28,7 @@ vim.api.nvim_set_keymap('n', '<leader>o', 'o<ESC>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>O', 'O<ESC>', {noremap = true})
 
 -- console.log word under cursor
-vim.api.nvim_set_keymap('n', '<leader>cl', "yiwoconsole.log('<c-r>\", <c-r>\");<esc>^", {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>cl', "yiwoconsole.log('<c-r>\", <c-r>\"');<esc>^", {noremap = true})
 
 vim.api.nvim_set_keymap('n', '<leader>d', ':r!date<esc>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>n', ':E<esc>', {noremap = true})
@@ -44,6 +44,9 @@ for _, c in pairs({'"', "'", '`', '(', '{', '[', '<'}) do
   vim.api.nvim_set_keymap('v', '<leader>'..c, 'S'..c..'lvi'..c, {noremap = true})
 end
 
--- double press tab for telescope
-vim.api.nvim_set_keymap('n', '<Tab><Tab>', ":lua require('telescope.builtin').find_files()<CR>", {noremap = true, silent = true})
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 
