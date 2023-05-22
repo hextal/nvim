@@ -1,0 +1,49 @@
+vim.api.nvim_set_keymap('n', '<Space>', '<Nop>', {noremap = true, silent = true})
+vim.g.mapleader = ' '
+
+-- Leader Keybindings
+
+-- markdown to html
+vim.api.nvim_set_keymap('n', '<leader>md', ':%!markdown --html4tags <cr>', {noremap = true})
+
+-- inset semicolon to end of the line
+vim.api.nvim_set_keymap('i', '<leader>;', '<c-o>A;', {noremap = true})
+vim.api.nvim_set_keymap('i', '<leader>,', '<c-o>A,', {noremap = true})
+vim.api.nvim_set_keymap('i', '<leader>.', '<c-o>A.', {noremap = true})
+vim.api.nvim_set_keymap('i', '<leader>]', '<c-o>A]', {noremap = true})
+vim.api.nvim_set_keymap('i', '<leader>}', '<c-o>A}', {noremap = true})
+vim.api.nvim_set_keymap('i', '<leader>)', '<c-o>A)', {noremap = true})
+vim.api.nvim_set_keymap('i', '<leader><space>', '<c-o>A ', {noremap = true})
+
+-- Tab navigation
+for i = 1, 9 do
+  vim.api.nvim_set_keymap('n', '<leader>'..i, i..'gt', {noremap = true})
+end
+
+vim.api.nvim_set_keymap('n', '<leader>h', ':tabprevious<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>l', ':tabnext<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>t', ':tabnew<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>w', ':tabclose<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>o', 'o<ESC>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>O', 'O<ESC>', {noremap = true})
+
+-- console.log word under cursor
+vim.api.nvim_set_keymap('n', '<leader>cl', "yiwoconsole.log('<c-r>\", <c-r>\");<esc>^", {noremap = true})
+
+vim.api.nvim_set_keymap('n', '<leader>d', ':r!date<esc>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>n', ':E<esc>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>s', ':w !sudo tee %<esc>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>q', [[ :s/"\(.*\)"/'\1'<esc> ]], {noremap = true})
+
+
+-- search for word under the cursor
+vim.api.nvim_set_keymap('n', '<leader>/', "\"fyiw :/<c-r>f<cr>", {noremap = true})
+
+-- set wrapping characters around word
+for _, c in pairs({'"', "'", '`', '(', '{', '[', '<'}) do
+  vim.api.nvim_set_keymap('v', '<leader>'..c, 'S'..c..'lvi'..c, {noremap = true})
+end
+
+-- double press tab for telescope
+vim.api.nvim_set_keymap('n', '<Tab><Tab>', ":lua require('telescope.builtin').find_files()<CR>", {noremap = true, silent = true})
+
