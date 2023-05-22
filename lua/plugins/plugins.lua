@@ -46,6 +46,11 @@ use('neovim/nvim-lspconfig')
 use('jose-elias-alvarez/null-ls.nvim')
 use('MunifTanjim/prettier.nvim')
 
+use({
+    "aserowy/tmux.nvim",
+    config = function() return require("tmux").setup() end
+})
+
  -- Set up nvim-cmp.
   local cmp = require'cmp'
 
