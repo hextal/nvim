@@ -28,7 +28,9 @@ vim.api.nvim_set_keymap('n', '<leader>o', 'o<ESC>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>O', 'O<ESC>', {noremap = true})
 
 -- console.log word under cursor
-vim.api.nvim_set_keymap('n', '<leader>cl', "yiwoconsole.log('<c-r>\", <c-r>\"');<esc>^", {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>cl', ":lua vim.cmd('normal! yiwoconsole.log(\"' .. vim.fn.expand('<cword>') .. '\");')<CR>", { silent = true })
+
+
 
 vim.api.nvim_set_keymap('n', '<leader>d', ':r!date<esc>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>n', ':E<esc>', {noremap = true})
@@ -49,4 +51,6 @@ vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
 vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+
+vim.api.nvim_set_keymap('n', '<F1>', ':NvimTreeFocus<CR>', { noremap = true, silent = true })
 

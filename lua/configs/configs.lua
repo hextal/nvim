@@ -1,5 +1,8 @@
 vim.cmd('filetype plugin indent on') -- required
 
+vim.opt.termguicolors = true
+
+
 -- Relative line numbering
 vim.wo.relativenumber = true
 

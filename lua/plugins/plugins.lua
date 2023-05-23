@@ -30,6 +30,9 @@ use 'hrsh7th/cmp-path'
 use 'hrsh7th/cmp-cmdline'
 use 'hrsh7th/nvim-cmp'
 
+use 'nvim-tree/nvim-tree.lua'
+use 'nvim-tree/nvim-web-devicons'
+
 use 'saadparwaiz1/cmp_luasnip'
 use {
   'nvim-telescope/telescope.nvim', tag = '0.1.1',
@@ -41,6 +44,7 @@ use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
 use 'nvim-treesitter/nvim-treesitter'
 
 use 'ervandew/supertab'
+use 'simrat39/rust-tools.nvim'
 
 use('neovim/nvim-lspconfig')
 use('jose-elias-alvarez/null-ls.nvim')
@@ -49,6 +53,31 @@ use('MunifTanjim/prettier.nvim')
 use({
     "aserowy/tmux.nvim",
     config = function() return require("tmux").setup() end
+})
+
+use ({
+	"windwp/nvim-autopairs",
+    config = function() require("nvim-autopairs").setup() end
+    })
+
+use{
+	'norcalli/nvim-colorizer.lua',
+    config = function() require'colorizer'.setup() end
+}
+
+-- Install without configuration
+use ({ 'projekt0n/github-nvim-theme' })
+
+-- Or with configuration
+use({
+  'projekt0n/github-nvim-theme',
+  config = function()
+    require('github-theme').setup({
+      -- ...
+    })
+
+    vim.cmd('colorscheme github_dark')
+  end
 })
 
  -- Set up nvim-cmp.
@@ -108,7 +137,7 @@ use({
     -- Set up lspconfig.
   local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-  require('lspconfig')['tsserver'].setup {
+  require('lspconfig')['rust_analyzer'].setup {
     capabilities = capabilities
   }
 
