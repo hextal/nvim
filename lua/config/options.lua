@@ -1,7 +1,9 @@
-vim.cmd('filetype plugin indent on') -- required
+-- Options are automatically loaded before lazy.nvim startup
+-- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
+-- Add any additional options here
+vim.cmd("filetype plugin indent on") -- required
 
 vim.opt.termguicolors = true
-
 
 -- Relative line numbering
 vim.wo.relativenumber = true
@@ -68,10 +70,10 @@ vim.o.mouse = "c"
 vim.o.clipboard = "unnamedplus"
 
 -- Remove trailing whitespaces
-vim.api.nvim_command('autocmd BufWritePre * :%s/\\s\\+$//e')
+vim.api.nvim_command("autocmd BufWritePre * :%s/\\s\\+$//e")
 
 -- Disable Ex mode
-vim.api.nvim_set_keymap('n', 'Q', '<NOP>', {noremap = true})
+vim.api.nvim_set_keymap("n", "Q", "<NOP>", { noremap = true })
 
 -- Disable backup, writebackup and swapfile
 vim.o.backup = false
@@ -88,7 +90,6 @@ vim.o.ttimeoutlen = 0
 -- Toggle invisible characters
 vim.o.list = true
 vim.o.listchars = "tab:→\\ ,eol:¬,trail:⋅,extends:❯,precedes:❮"
-vim.api.nvim_command('highlight SpecialKey ctermbg=none ctermfg=8') -- make the highlighting of tabs less annoying
-vim.api.nvim_command('highlight NonText ctermbg=none ctermfg=8')
+vim.api.nvim_command("highlight SpecialKey ctermbg=none ctermfg=8") -- make the highlighting of tabs less annoying
+vim.api.nvim_command("highlight NonText ctermbg=none ctermfg=8")
 vim.o.showbreak = "↪"
-

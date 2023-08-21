@@ -1,146 +1,324 @@
-return require('packer').startup(function(use)
+return {
+  -- add gruvbox
+  --{ "catppuccin/catppuccin" },
 
-  use 'wbthomason/packer.nvim'
+  -- Configure LazyVim to load gruvbox
+  {
+    "LazyVim/LazyVim",
+    opts = {
+      colorscheme = "catppuccin",
+    },
+  },
+  {
+    "tpope/vim-fugitive",
+  },
+  {
+    "ThePrimeagen/harpoon",
+  },
+  {
+    "mbbill/undotree",
+  },
+  -- change trouble config
+  {
+    "folke/trouble.nvim",
+    -- opts will be merged with the parent spec
+    opts = { use_diagnostic_signs = true },
+  },
 
-  use {
-    "williamboman/mason.nvim",
-    run = ":MasonUpdate" -- :MasonUpdate updates registry contents
-}
-require("mason").setup()
+  -- disable trouble
+  { "folke/trouble.nvim", enabled = false },
 
-use {
-    'goolord/alpha-nvim',
-    requires = { 'nvim-tree/nvim-web-devicons' },
-    config = function ()
-        require'alpha'.setup(require'alpha.themes.startify'.config)
-    end
-}
+  -- add symbols-outline
+  {
+    "simrat39/symbols-outline.nvim",
+    cmd = "SymbolsOutline",
+    keys = { { "<leader>cs", "<cmd>SymbolsOutline<cr>", desc = "Symbols Outline" } },
+    config = true,
+  },
 
-use {
-  'nvim-lualine/lualine.nvim',
-  requires = { 'nvim-tree/nvim-web-devicons', opt = true }
-}
+  -- override nvim-cmp and add cmp-emoji
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = { "hrsh7th/cmp-emoji" },
+    ---@param opts cmp.ConfigSchema
+    opts = function(_, opts)
+      local cmp = require("cmp")
+      opts.sources = cmp.config.sources(vim.list_extend(opts.sources, { { name = "emoji" } }))
+    end,
+  },
 
-use 'airblade/vim-gitgutter'
+  -- change some telescope options and a keymap to browse plugin files
+  {
+    "nvim-telescope/telescope.nvim",
+    keys = {
+      -- add a keymap to browse plugin files
+      -- stylua: ignore
+      {
+        "<leader>fp",
+        function() require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root }) end,
+        desc = "Find Plugin File",
+      },
+    },
+    -- change some options
+    opts = {
+      defaults = {
+        layout_strategy = "horizontal",
+        layout_config = { prompt_position = "top" },
+        sorting_strategy = "ascending",
+        winblend = 0,
+      },
+    },
+  },
 
-use 'neovim/nvim-lspconfig'
-use 'hrsh7th/cmp-nvim-lsp'
-use 'hrsh7th/cmp-buffer'
-use 'hrsh7th/cmp-path'
-use 'hrsh7th/cmp-cmdline'
-use 'hrsh7th/nvim-cmp'
+  -- add telescope-fzf-native
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = { { "nvim-telescope/telescope-fzf-native.nvim", build = "make" } },
+    -- apply the config and additionally load fzf-native
+    config = function(_, opts)
+      local telescope = require("telescope")
+      telescope.setup(opts)
+      telescope.load_extension("fzf")
+    end,
+  },
 
-use 'nvim-tree/nvim-tree.lua'
-use 'nvim-tree/nvim-web-devicons'
+  -- add pyright to lspconfig
+  {
+    "neovim/nvim-lspconfig",
+    ---@class PluginLspOpts
+    opts = {
+      ---@type lspconfig.options
+      servers = {
+        -- pyright will be automatically installed with mason and loaded with lspconfig
+        pyright = {},
+      },
+    },
+  },
 
-use 'saadparwaiz1/cmp_luasnip'
-use {
-  'nvim-telescope/telescope.nvim', tag = '0.1.1',
--- or                            , branch = '0.1.x',
-  requires = { {'nvim-lua/plenary.nvim'} }
-}
-
-use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-use 'nvim-treesitter/nvim-treesitter'
-
-use 'ervandew/supertab'
-use 'simrat39/rust-tools.nvim'
-
-use('neovim/nvim-lspconfig')
-use('jose-elias-alvarez/null-ls.nvim')
-use('MunifTanjim/prettier.nvim')
-
-use({
-    "aserowy/tmux.nvim",
-    config = function() return require("tmux").setup() end
-})
-
-use ({
-	"windwp/nvim-autopairs",
-    config = function() require("nvim-autopairs").setup() end
-    })
-
-use{
-	'norcalli/nvim-colorizer.lua',
-    config = function() require'colorizer'.setup() end
-}
-
--- Install without configuration
-use ({ 'projekt0n/github-nvim-theme' })
-
--- Or with configuration
-use({
-  'projekt0n/github-nvim-theme',
-  config = function()
-    require('github-theme').setup({
-      -- ...
-    })
-
-    vim.cmd('colorscheme github_dark')
-  end
-})
-
- -- Set up nvim-cmp.
-  local cmp = require'cmp'
-
-  cmp.setup({
-    snippet = {
-      expand = function(args)
-        require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+  -- add tsserver and setup with typescript.nvim instead of lspconfig
+  {
+    "neovim/nvim-lspconfig",
+    dependencies = {
+      "jose-elias-alvarez/typescript.nvim",
+      init = function()
+        require("lazyvim.util").on_attach(function(_, buffer)
+          -- stylua: ignore
+          vim.keymap.set( "n", "<leader>co", "TypescriptOrganizeImports", { buffer = buffer, desc = "Organize Imports" })
+          vim.keymap.set("n", "<leader>cR", "TypescriptRenameFile", { desc = "Rename File", buffer = buffer })
+        end)
       end,
     },
-    window = {
-      -- completion = cmp.config.window.bordered(),
-      -- documentation = cmp.config.window.bordered(),
+    ---@class PluginLspOpts
+    opts = {
+      ---@type lspconfig.options
+      servers = {
+        -- tsserver will be automatically installed with mason and loaded with lspconfig
+        tsserver = {},
+      },
+      -- you can do any additional lsp server setup here
+      -- return true if you don't want this server to be setup with lspconfig
+      ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
+      setup = {
+        -- example to setup with typescript.nvim
+        tsserver = function(_, opts)
+          require("typescript").setup({ server = opts })
+          return true
+        end,
+        -- Specify * to use this function as a fallback for any server
+        -- ["*"] = function(server, opts) end,
+      },
     },
-    mapping = cmp.mapping.preset.insert({
-      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-f>'] = cmp.mapping.scroll_docs(4),
-      ['<C-Space>'] = cmp.mapping.complete(),
-      ['<C-e>'] = cmp.mapping.abort(),
-      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-    }),
-    sources = cmp.config.sources({
-	{ name = 'luasnip' }, -- For luasnip users.
-    }, {
-      { name = 'buffer' },
-    })
-  })
+  },
 
-  -- Set configuration for specific filetype.
-  cmp.setup.filetype('gitcommit', {
-    sources = cmp.config.sources({
-      { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
-    }, {
-      { name = 'buffer' },
-    })
-  })
+  -- for typescript, LazyVim also includes extra specs to properly setup lspconfig,
+  -- treesitter, mason and typescript.nvim. So instead of the above, you can use:
+  { import = "lazyvim.plugins.extras.lang.typescript" },
 
-  -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline({ '/', '?' }, {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-      { name = 'buffer' }
-    }
-  })
+  -- add more treesitter parsers
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = {
+      ensure_installed = {
+        "bash",
+        --        "help",
+        "html",
+        "javascript",
+        "json",
+        "lua",
+        "markdown",
+        "markdown_inline",
+        "python",
+        "query",
+        "regex",
+        "tsx",
+        "typescript",
+        "vim",
+        "yaml",
+      },
+    },
+  },
 
-  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline(':', {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = cmp.config.sources({
-      { name = 'path' }
-    }, {
-      { name = 'cmdline' }
-    })
-  })
+  -- since `vim.tbl_deep_extend`, can only merge tables and not lists, the code above
+  -- would overwrite `ensure_installed` with the new value.
+  -- If you'd rather extend the default config, use the code below instead:
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = function(_, opts)
+      vim.list_extend(opts.ensure_installed, {
+        -- add tsx and treesitter
+        ensure_installed = {
+          "tsx",
+          "typescript",
+        },
+      })
+    end,
+  },
 
-    -- Set up lspconfig.
-  local capabilities = require('cmp_nvim_lsp').default_capabilities()
+  -- the opts function can also be used to change the default opts:
+  {
+    "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
+    opts = function(_, opts)
+      table.insert(opts.sections.lualine_x, "😄")
+    end,
+  },
 
-  require('lspconfig')['rust_analyzer'].setup {
-    capabilities = capabilities
-  }
+  -- or you can return new options to override all the defaults
+  {
+    "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
+    opts = function()
+      return {
+        --[[add your custom lualine config here]]
+      }
+    end,
+  },
 
-end)
+  ---- use mini.starter instead of alpha
+  --{ import = "lazyvim.plugins.extras.ui.mini-starter" },
 
+  -- add jsonls and schemastore ans setup treesitter for json, json5 and jsonc
+  { import = "lazyvim.plugins.extras.lang.json" },
 
+  -- add any tools you want to have installed below
+  {
+    "williamboman/mason.nvim",
+    opts = {
+      ensure_installed = {
+        "stylua",
+        "shellcheck",
+        "shfmt",
+        "flake8",
+      },
+    },
+  },
+
+  -- Use <tab> for completion and snippets (supertab)
+  -- first: disable default <tab> and <s-tab> behavior in LuaSnip
+  {
+    "L3MON4D3/LuaSnip",
+    keys = function()
+      return {}
+    end,
+  },
+  -- then: setup supertab in cmp
+  {
+    "L3MON4D3/LuaSnip",
+    keys = function()
+      return {}
+    end,
+  },
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "hrsh7th/cmp-emoji",
+    },
+    ---@param opts cmp.ConfigSchema
+    opts = function(_, opts)
+      local cmp = require("cmp")
+
+      opts.mapping = vim.tbl_extend("force", opts.mapping, {
+        ["<Tab>"] = cmp.mapping(function(fallback)
+          -- This little snippet will confirm with tab, and if no entry is selected, will confirm the first item
+          if cmp.visible() then
+            local entry = cmp.get_selected_entry()
+            if not entry then
+              cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+            else
+              cmp.confirm()
+            end
+          else
+            fallback()
+          end
+        end, { "i", "s", "c" }),
+      })
+    end,
+  },
+  {
+    "christoomey/vim-tmux-navigator",
+    lazy = false,
+  },
+  {
+    "zbirenbaum/copilot.lua",
+    lazy = false,
+    opts = function()
+      return require("config.copilot")
+    end,
+    config = function(_, opts)
+      require("copilot").setup(opts)
+    end,
+  },
+  {
+    "simrat39/rust-tools.nvim",
+    ft = "rust",
+    dependencies = "neovim/nvim-lspconfig",
+    opts = function()
+      return require("custom.configs.rust-tools")
+    end,
+    config = function(_, opts)
+      require("rust-tools").setup(opts)
+    end,
+  },
+  {
+    "saecki/crates.nvim",
+    ft = { "rust", "toml" },
+    config = function(_, opts)
+      local crates = require("crates")
+      crates.setup(opts)
+      require("cmp").setup.buffer({
+        sources = { { name = "crates" } },
+      })
+      crates.show()
+      require("core.utils").load_mappings("crates")
+    end,
+  },
+  {
+    "rust-lang/rust.vim",
+    ft = "rust",
+    init = function()
+      vim.g.rustfmt_autosave = 1
+    end,
+  },
+  --[[{
+    "mfussenegger/nvim-dap",
+    init = function()
+      require("core.utils").load_mappings("dap")
+    end,
+  },
+  {
+    "leoluz/nvim-dap-go",
+    ft = "go",
+    dependencies = "mfussenegger/nvim-dap",
+    config = function(_, opts)
+      require("dap-go").setup(opts)
+      require("core.utils").load_mappings("dap_go")
+    end,
+  },
+  {
+    "theHamsta/nvim-dap-virtual-text",
+    lazy = false,
+    config = function(_, opts)
+      require("nvim-dap-virtual-text").setup()
+    end,
+  },]]
+}
