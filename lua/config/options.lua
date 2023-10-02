@@ -81,7 +81,7 @@ vim.o.writebackup = false
 vim.o.swapfile = false
 
 -- Copy yank to the global system clipboard
-vim.o.clipboard = "unnamed"
+vim.o.clipboard = "unnamedplus"
 
 -- Stop delays
 vim.o.timeoutlen = 1000
