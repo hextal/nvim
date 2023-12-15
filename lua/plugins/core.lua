@@ -9,17 +9,27 @@ return {
 			panel = { enabled = false },
 		},
 	},
+
 	--Dash Board
-	{
-		"goolord/alpha-nvim",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-	},
+	--{
+	--"goolord/alpha-nvim",
+	--dependencies = { "nvim-tree/nvim-web-devicons" },
+	--},
+	-- Auto Formatting
+	--{ "nvimtools/none-ls.nvim" },
+
+	-- Treesitter
+	--{
+	--"nvim-treesitter/nvim-treesitter",
+	--build = ":TSUpdate",
+	--event = "bufWinEnter",
+	--dependencies = {
+	--"JoosepAlviste/nvim-ts-context-commentstring",
+	--},
+	--},
 
 	-- Vim Notification Popup
 	{ "rcarriga/nvim-notify" },
-
-	-- Auto Formatting
-	{ "jose-elias-alvarez/null-ls.nvim" },
 
 	-- Commnets Plugins
 	{ "numToStr/Comment.nvim" },
@@ -51,16 +61,6 @@ return {
 				current_line_blame = true,
 			})
 		end,
-	},
-
-	-- Treesitter
-	{
-		"nvim-treesitter/nvim-treesitter",
-		build = ":TSUpdate",
-		event = "bufWinEnter",
-		dependencies = {
-			"JoosepAlviste/nvim-ts-context-commentstring",
-		},
 	},
 
 	-- nvim-ts-autotag
