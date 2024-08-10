@@ -32,11 +32,11 @@ vim.o.matchtime = 2
 -- Error bells
 vim.o.errorbells = false
 vim.o.visualbell = true
-vim.o.t_vb = ""
+--vim.o.t_vb = ""
 vim.o.timeoutlen = 500
 
 -- Set 256 color support explicitly
-vim.o.t_Co = "256"
+--vim.o.t_Co = "256"
 
 -- Wrap settings
 vim.wo.wrap = true
