@@ -75,7 +75,6 @@ return {
 	-- Telescope
 	{
 		"nvim-telescope/telescope.nvim",
-		tag = "0.1.1",
 		dependencies = {},
 		config = function()
 			require("telescope").load_extension("lazygit")
@@ -114,6 +113,5 @@ return {
 	{ "mfussenegger/nvim-dap" },
 	{ "leoluz/nvim-dap-go" },
 	{ "theHamsta/nvim-dap-virtual-text" },
-	{ "aserowy/tmux.nvim" },
 	{ "ThePrimeagen/harpoon" },
 }
