@@ -32,11 +32,6 @@ Map("i", "<leader>}", "<c-o>A}", Opts)
 Map("i", "<leader>)", "<c-o>A)", Opts)
 Map("i", "<leader><space>", "<c-o>A ", Opts)
 
-Map("n", "<C-h>", "<Cmd>TmuxNavigateLeft<CR>", Opts)
-Map("n", "<C-j>", "<Cmd>TmuxNavigateDown<CR>", Opts)
-Map("n", "<C-k>", "<Cmd>TmuxNavigateUp<CR>", Opts)
-Map("n", "<C-l>", "<Cmd>TmuxNavigateRight<CR>", Opts)
-
 -- Define a function that emulates the behavior of your Vim command
 function Console_log_current_word()
 	local word = vim.fn.expand("<cword>")
