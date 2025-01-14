@@ -72,15 +72,6 @@ return {
 	-- nvim autopairs
 	{ "windwp/nvim-autopairs" },
 	{ "kdheepak/lazygit.nvim" },
-	-- Telescope
-	{
-		"nvim-telescope/telescope.nvim",
-		tag = "0.1.1",
-		dependencies = {},
-		config = function()
-			require("telescope").load_extension("lazygit")
-		end,
-	},
 
 	-- NeoVIMTree
 	{

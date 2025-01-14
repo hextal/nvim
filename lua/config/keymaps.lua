@@ -10,14 +10,6 @@ local Opts = { noremap = true, silent = true }
 Map("n", "<Space>", "<Nop>", Opts)
 vim.g.mapleader = " "
 
---TelescopeMappings
-local telescope = require("telescope.builtin")
-
-Keymap("n", "<leader>ff", telescope.find_files, {})
-Keymap("n", "<leader>fg", telescope.live_grep, {})
-Keymap("n", "<leader>fb", telescope.buffers, {})
-Keymap("n", "<leader>fh", telescope.help_tags, {})
-
 --trouble
 Keymap("n", "<leader>xx", function()
 	require("trouble").open()
