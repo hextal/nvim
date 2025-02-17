@@ -30,7 +30,6 @@ return {
 				"markdown",
 				"markdown_inline",
 				"pug",
-				"python",
 				"ruby",
 				"rust",
 				"typescript",
